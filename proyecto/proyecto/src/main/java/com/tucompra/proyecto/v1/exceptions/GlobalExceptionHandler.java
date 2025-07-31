@@ -1,0 +1,54 @@
+package com.tucompra.proyecto.v1.exceptions;
+
+import com.tucompra.proyecto.v1.exceptions.messages.ApiError;
+import com.tucompra.proyecto.v1.exceptions.usuario.DuplicateUserException;
+import com.tucompra.proyecto.v1.exceptions.usuario.UserNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiError> handleTypeMismatchException(
+            MethodArgumentTypeMismatchException ex,
+            HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                "Formato inválido para el parámetro: " + ex.getName(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiError> handleUserNotFoundException(
+            UserNotFoundException ex, HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<String> handleDuplicateUserException(DuplicateUserException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGenericException(Exception ex) {
+        return new ResponseEntity<>("An unexpected error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
