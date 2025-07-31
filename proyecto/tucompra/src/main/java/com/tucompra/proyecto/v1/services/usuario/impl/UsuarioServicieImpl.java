@@ -1,7 +1,7 @@
 package com.tucompra.proyecto.v1.services.usuario.impl;
 
 import com.tucompra.proyecto.v1.domain.Usuario;
-import com.tucompra.proyecto.v1.exceptions.usuario.UserNotFoundException;
+import com.tucompra.proyecto.v1.exceptions.usuario.ResourceNotFoundException;
 import com.tucompra.proyecto.v1.repositories.usuario.IUsuarioRepository;
 import com.tucompra.proyecto.v1.services.usuario.IUsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UsuarioServicieImpl implements IUsuarioService {
     @Override
     public Usuario findById(UUID id) {
         return iUsuarioRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con ID = " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID = " + id));
     }
 
     @Override

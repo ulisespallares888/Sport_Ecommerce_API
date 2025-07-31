@@ -1,8 +1,8 @@
 package com.tucompra.proyecto.v1.exceptions;
 
 import com.tucompra.proyecto.v1.exceptions.messages.ApiError;
-import com.tucompra.proyecto.v1.exceptions.usuario.DuplicateUserException;
-import com.tucompra.proyecto.v1.exceptions.usuario.UserNotFoundException;
+import com.tucompra.proyecto.v1.exceptions.usuario.DuplicateResourceException;
+import com.tucompra.proyecto.v1.exceptions.usuario.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiError> handleUserNotFoundException(
-            UserNotFoundException ex, HttpServletRequest request) {
+            ResourceNotFoundException ex, HttpServletRequest request) {
 
         ApiError error = new ApiError(
                 HttpStatus.NOT_FOUND.value(),
@@ -42,8 +42,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DuplicateUserException.class)
-    public ResponseEntity<String> handleDuplicateUserException(DuplicateUserException ex) {
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<String> handleDuplicateUserException(DuplicateResourceException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
