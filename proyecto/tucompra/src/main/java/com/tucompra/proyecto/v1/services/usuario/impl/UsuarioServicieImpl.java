@@ -6,6 +6,7 @@ import com.tucompra.proyecto.v1.repositories.usuario.IUsuarioRepository;
 import com.tucompra.proyecto.v1.services.usuario.IUsuarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Primary
 public class UsuarioServicieImpl implements IUsuarioService {
 
     private final IUsuarioRepository iUsuarioRepository;
@@ -27,7 +29,7 @@ public class UsuarioServicieImpl implements IUsuarioService {
     @Override
     public Usuario findById(UUID id) {
         return iUsuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID = " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID = %s".formatted(id)));
     }
 
     @Override
@@ -36,8 +38,10 @@ public class UsuarioServicieImpl implements IUsuarioService {
     }
 
     @Override
-    public boolean delete(UUID uuid) {
-        return false;
+    public void delete(UUID id) {
+        Usuario usuario = iUsuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con ID = %s".formatted(id)));
+        iUsuarioRepository.delete(usuario);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.tucompra.proyecto.v1.controllers.usuario;
 
 import com.tucompra.proyecto.v1.domain.Usuario;
-import com.tucompra.proyecto.v1.services.usuario.impl.UsuarioServicieImpl;
+import com.tucompra.proyecto.v1.services.usuario.IUsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UsuarioController {
 
-    private final UsuarioServicieImpl usuarioServicie ;
+    private final IUsuarioService iUsuarioServicie ;
     private final PagedResourcesAssembler<Usuario> pagedResourcesAssembler;
 
 
@@ -33,35 +32,40 @@ public class UsuarioController {
     public ResponseEntity<PagedModel<EntityModel<Usuario>>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sort) {
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction) {
 
-        // Creamos el Pageable con los parámetros de paginación y ordenación
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+        Sort sortOrder = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sort).descending()
+                : Sort.by(sort).ascending();
 
-        // Obtenemos los usuarios paginados desde el servicio
-        Page<Usuario> usuarios = usuarioServicie.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        Page<Usuario> usuarios = iUsuarioServicie.findAll(pageable);
 
-        // Convertimos los usuarios en un PagedModel con enlaces HATEOAS
-        PagedModel<EntityModel<Usuario>> usuarioPagedModel = pagedResourcesAssembler.toModel(usuarios, usuario -> {
-                    // Envolvemos el usuario en un EntityModel antes de agregarle enlaces
-                    EntityModel<Usuario> usuarioEntityModel = EntityModel.of(usuario);
-                    usuarioEntityModel.add(
-                                    WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class)
-                                                    .findById(usuario.getId()))
-                                            .withSelfRel())
-                            .add(Link.of("http://google.com").withRel("google"));
-
-                    return usuarioEntityModel;
-                }
-        );
+        return ResponseEntity.ok(toPagedModel(usuarios));
+    }
 
 
-        return ResponseEntity.ok(usuarioPagedModel);
+    private PagedModel<EntityModel<Usuario>> toPagedModel(Page<Usuario> usuarios) {
+        return pagedResourcesAssembler.toModel(usuarios, usuario -> {
+            EntityModel<Usuario> usuarioEntityModel = EntityModel.of(usuario);
+            usuarioEntityModel.add(
+                    WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UsuarioController.class)
+                            .findById(usuario.getId())).withSelfRel());
+            return usuarioEntityModel;
+        });
     }
 
     @GetMapping(value = "{id}")
     public Usuario findById(@Valid @PathVariable UUID id) {
-        return usuarioServicie.findById(id);
+        return iUsuarioServicie.findById(id);
     }
+
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<Usuario> delete(@Valid @PathVariable UUID id) {
+         iUsuarioServicie.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

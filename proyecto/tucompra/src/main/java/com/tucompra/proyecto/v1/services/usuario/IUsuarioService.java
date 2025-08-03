@@ -10,7 +10,7 @@ public interface IUsuarioService {
     Page<Usuario> findAll(Pageable pageable);
     Usuario findById(UUID id);
     Usuario create(Usuario usuario)  ;
-    boolean delete (UUID uuid);
+    void delete (UUID id);
     Object update(UUID uuid, Usuario usuario)  throws Exception;
 
 }
