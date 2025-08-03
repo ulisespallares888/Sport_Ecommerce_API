@@ -1,7 +1,11 @@
 package com.tucompra.proyecto.v1.services.usuario.impl;
 
+import com.tucompra.proyecto.v1.domain.TipoUsuario;
 import com.tucompra.proyecto.v1.domain.Usuario;
+import com.tucompra.proyecto.v1.dto.responses.UsuarioDTO;
+import com.tucompra.proyecto.v1.exceptions.usuario.DuplicateResourceException;
 import com.tucompra.proyecto.v1.exceptions.usuario.ResourceNotFoundException;
+import com.tucompra.proyecto.v1.mapping.usuario.MapperUsuario;
 import com.tucompra.proyecto.v1.repositories.usuario.IUsuarioRepository;
 import com.tucompra.proyecto.v1.services.usuario.IUsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +37,15 @@ public class UsuarioServicieImpl implements IUsuarioService {
     }
 
     @Override
-    public Usuario create(Usuario usuario) {
-        return iUsuarioRepository.save(usuario);
+    public Usuario create(UsuarioDTO usuarioDTO) {
+        if (iUsuarioRepository.existsByEmail(usuarioDTO.getEmail())) {
+            throw new DuplicateResourceException("El usuario ya existe con el email: %s".formatted(usuarioDTO.getEmail()));
+        }
+
+        TipoUsuario tipoUsuario = TipoUsuario.valueOf(usuarioDTO.getTipo().toUpperCase());
+
+        Usuario usuarioSave = MapperUsuario.INSTANCIA.usuarioDTOToUsuario(usuarioDTO);
+        return iUsuarioRepository.save(usuarioSave);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.tucompra.proyecto.v1.controllers.usuario;
 
 import com.tucompra.proyecto.v1.domain.Usuario;
+import com.tucompra.proyecto.v1.dto.responses.UsuarioDTO;
 import com.tucompra.proyecto.v1.services.usuario.IUsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -67,5 +68,10 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping(value = "")
+    public ResponseEntity<Usuario> create(@Valid @RequestBody UsuarioDTO usuarioDTO) {
+        Usuario usuarioSave = iUsuarioServicie.create(usuarioDTO);
+        return ResponseEntity.ok(usuarioSave);
+    }
 
 }

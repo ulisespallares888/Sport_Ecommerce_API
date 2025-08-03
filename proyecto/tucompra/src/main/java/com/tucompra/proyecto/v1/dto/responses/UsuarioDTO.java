@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class UsuarioDTO {
-    private UUID id;
-    private String name;
+    private String nombre;
+    private String apellido;
+    private String tipo;
+    private String email;
 }

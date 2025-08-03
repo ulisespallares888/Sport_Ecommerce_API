@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 @Registered
-public interface IUsuarioRepository  extends JpaRepository<Usuario, UUID> {}
+public interface IUsuarioRepository  extends JpaRepository<Usuario, UUID> {
+    boolean existsByEmail(String email);
+}

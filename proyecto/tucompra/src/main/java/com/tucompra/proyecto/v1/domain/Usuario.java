@@ -31,12 +31,9 @@ public class Usuario {
     @Column
     private String apellido;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipo;
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Rol rol;
 
     @Column
     private String email;
