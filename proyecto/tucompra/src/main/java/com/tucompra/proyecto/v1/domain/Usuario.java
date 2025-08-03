@@ -31,7 +31,7 @@ public class Usuario {
     @Column
     private String apellido;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipo;
 

@@ -42,9 +42,11 @@ public class UsuarioServicieImpl implements IUsuarioService {
             throw new DuplicateResourceException("El usuario ya existe con el email: %s".formatted(usuarioDTO.getEmail()));
         }
 
-        TipoUsuario tipoUsuario = TipoUsuario.valueOf(usuarioDTO.getTipo().toUpperCase());
+        TipoUsuario tipoUsuario = TipoUsuario.fromString(usuarioDTO.getTipo());
 
         Usuario usuarioSave = MapperUsuario.INSTANCIA.usuarioDTOToUsuario(usuarioDTO);
+        usuarioSave.setTipo(tipoUsuario);
+
         return iUsuarioRepository.save(usuarioSave);
     }
 

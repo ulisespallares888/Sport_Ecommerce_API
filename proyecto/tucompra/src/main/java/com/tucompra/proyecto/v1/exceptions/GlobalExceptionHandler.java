@@ -2,6 +2,7 @@ package com.tucompra.proyecto.v1.exceptions;
 
 import com.tucompra.proyecto.v1.exceptions.messages.ApiError;
 import com.tucompra.proyecto.v1.exceptions.usuario.DuplicateResourceException;
+import com.tucompra.proyecto.v1.exceptions.usuario.IlegalTypeUser;
 import com.tucompra.proyecto.v1.exceptions.usuario.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,18 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(IlegalTypeUser.class)
+    public ResponseEntity<ApiError> handleIllegalTypeUserException(IlegalTypeUser ex, HttpServletRequest request) {
+        ApiError error = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

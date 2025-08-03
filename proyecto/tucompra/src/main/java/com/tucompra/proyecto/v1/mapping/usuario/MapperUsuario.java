@@ -19,7 +19,6 @@ public interface MapperUsuario {
 
     @Mapping(source = "nombre", target="nombre")
     @Mapping(source = "apellido", target="apellido")
-    @Mapping(source = "tipo", target="tipo")
     @Mapping(source = "email", target="email")
     Usuario usuarioDTOToUsuario(UsuarioDTO usuarioDTO);
 
