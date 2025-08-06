@@ -11,7 +11,7 @@
 	<groupId>com.sport-ecommerce</groupId>
 	<artifactId>sport-ecommerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>proyecto</name>
+	<name>sport-ecommerce</name>
 	<description>Es un sistema para mejorar la experiencia de realizar las compras</description>
 	<url/>
 	<licenses>
