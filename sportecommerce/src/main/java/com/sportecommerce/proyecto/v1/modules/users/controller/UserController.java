@@ -1,8 +1,9 @@
 package com.sportecommerce.proyecto.v1.modules.users.controller;
 
-import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTO;
+import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
+import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.InvalidRequestException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -69,8 +71,8 @@ public class UserController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<User> create(@Valid @RequestBody UserDTO userDTO) {
-        User userSave = iUserService.create(userDTO);
+    public ResponseEntity<User> create(@Valid @RequestBody UserDTORequest userDTORequest) {
+        User userSave = iUserService.create(userDTORequest);
         return ResponseEntity.ok(userSave);
     }
 

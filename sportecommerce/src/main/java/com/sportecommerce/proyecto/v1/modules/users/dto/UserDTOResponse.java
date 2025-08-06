@@ -10,17 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDTO {
-    @NotBlank(message = "Name don´t be null")
+public class UserDTOResponse {
     private String name;
 
-    @NotBlank(message = "LastName don´t be null")
     private String lastName;
 
-    @NotNull(message = "Type don´t be null")
     private String typeUser;
 
-    @NotBlank(message = "Email don´t be null")
-    @Email(message = "Email has´t valid format")
     private String email;
 }

@@ -1,6 +1,6 @@
 package com.sportecommerce.proyecto.v1.modules.users.mapper;
 
-import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTO;
+import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,12 +15,13 @@ public interface MapperUser {
     @Mapping(source = "lastName", target="lastName")
     @Mapping(source = "typeUser", target="typeUser")
     @Mapping(source = "email", target="email")
-    UserDTO userToUserDTO(User user);
+    UserDTORequest userToUserDTO(User user);
 
     @Mapping(source = "name", target="name")
     @Mapping(source = "lastName", target="lastName")
     @Mapping(source = "email", target="email")
-    User userDTOToUser(UserDTO userDTO);
+    @Mapping(source = "typeUser", target="typeUser")
+    User userDTOToUser(UserDTORequest userDTORequest);
 
 
 }

@@ -3,6 +3,7 @@ package com.sportecommerce.proyecto.v1.shared.exceptions;
 import com.sportecommerce.proyecto.v1.shared.exceptions.messages.ApiError;
 import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.DuplicateResourceException;
 import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.IlegalTypeUser;
+import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.InvalidRequestException;
 import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,20 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
                 "Formato inválido para el parámetro: " + ex.getName(),
+                request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ApiError> handleInvalidRequestException(
+            InvalidRequestException ex, HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
                 request.getRequestURI()
         );
 
