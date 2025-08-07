@@ -37,11 +37,11 @@ public class ValidatorUser {
             throw new InvalidRequestException("The email format is invalid");
         }
         if (userDTORequest.getTypeUser() == null || userDTORequest.getTypeUser().isBlank()) {
-            throw new IlegalTypeUser("The type user cannot be null or empty. Allowed types are: BUYER or SELLER.");
+            throw new IlegalTypeUser("The type user cannot be null or empty. Allowed types are: WHOLESALE_BUYERS or RETAIL_BUYERS.");
         }
-        if (!userDTORequest.getTypeUser().equals("BUYER") &&
-                !userDTORequest.getTypeUser().equals("SELLER")) {
-            throw new IlegalTypeUser("Invalid type user: %s. Allowed types are: BUYER or SELLER.".formatted(userDTORequest.getTypeUser()));
+        if (!userDTORequest.getTypeUser().equals("RETAIL_BUYERS") &&
+                !userDTORequest.getTypeUser().equals("WHOLESALE_BUYERS")) {
+            throw new IlegalTypeUser("Invalid type user: %s. Allowed types are: WHOLESALE_BUYERS or RETAIL_BUYERS.".formatted(userDTORequest.getTypeUser()));
         }
 
     }

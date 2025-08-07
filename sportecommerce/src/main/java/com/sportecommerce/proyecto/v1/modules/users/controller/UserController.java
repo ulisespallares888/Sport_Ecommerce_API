@@ -3,7 +3,6 @@ package com.sportecommerce.proyecto.v1.modules.users.controller;
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.InvalidRequestException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
