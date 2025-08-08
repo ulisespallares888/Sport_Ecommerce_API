@@ -10,7 +10,8 @@ import java.util.List;
 
 
 
-@Entity(name = "wish_lists")
+@Table(name = "wish_lists")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
