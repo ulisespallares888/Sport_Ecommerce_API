@@ -1,5 +1,7 @@
 package com.sportecommerce.proyecto.v1.modules.users.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,20 +17,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "usuarios")
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @JdbcTypeCode(SqlTypes.CHAR)
-    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
-    private UUID id;
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
+    private Long id;
 
 
     @Column(nullable = false)
     private String name;
 
     @Column
+    @JsonProperty("lastname")
     private String lastName;
 
     @Column
@@ -41,7 +43,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Rol rol = Rol.CUSTOMER;
+    private Role role = Role.CUSTOMER;
 
     @Column
     private String password;

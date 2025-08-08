@@ -1,10 +1,10 @@
 package com.sportecommerce.proyecto.v1.shared.exceptions;
 
 import com.sportecommerce.proyecto.v1.shared.exceptions.messages.ApiError;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.DuplicateResourceException;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.IlegalTypeUser;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.InvalidRequestException;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.ResourceNotFoundException;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.DuplicateResourceException;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.IlegalTypeUser;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidRequestException;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,12 +59,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<ApiError> handleDuplicateUserException(DuplicateResourceException ex) {
+    public ResponseEntity<ApiError> handleDuplicateUserException(DuplicateResourceException ex, HttpServletRequest request) {
         ApiError error = new ApiError(
                 HttpStatus.CONFLICT.value(),
                 "Conflict",
                 ex.getMessage(),
-                null
+                request.getRequestURI()
+
         );
 
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);

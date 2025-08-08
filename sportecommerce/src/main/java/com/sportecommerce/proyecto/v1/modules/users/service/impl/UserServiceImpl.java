@@ -6,15 +6,13 @@ import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
 import com.sportecommerce.proyecto.v1.modules.users.repository.IUserRepository;
 import com.sportecommerce.proyecto.v1.modules.users.validation.ValidatorUser;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.ResourceNotFoundException;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -30,7 +28,7 @@ public class UserServiceImpl implements IUserService {
         return userPage;
     }
     @Override
-    public User findById(UUID id) {
+    public User findById(Long id) {
         return iUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no found with ID = %s".formatted(id)));
     }
@@ -46,14 +44,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(Long id) {
         User user = iUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no found with ID = %s".formatted(id)));
         iUserRepository.delete(user);
     }
 
     @Override
-    public Object update(UUID uuid, User user) throws Exception {
+    public Object update(Long id, User user) throws Exception {
         return null;
     }
 

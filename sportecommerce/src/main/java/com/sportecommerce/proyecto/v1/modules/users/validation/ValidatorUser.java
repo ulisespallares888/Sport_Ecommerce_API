@@ -2,9 +2,9 @@ package com.sportecommerce.proyecto.v1.modules.users.validation;
 
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.repository.IUserRepository;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.DuplicateResourceException;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.IlegalTypeUser;
-import com.sportecommerce.proyecto.v1.shared.exceptions.usuario.InvalidRequestException;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.DuplicateResourceException;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.IlegalTypeUser;
+import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidRequestException;
 
 import java.util.Objects;
 import java.util.stream.Stream;

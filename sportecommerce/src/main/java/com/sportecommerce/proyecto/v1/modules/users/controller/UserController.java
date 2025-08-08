@@ -59,12 +59,12 @@ public class UserController {
     }
 
     @GetMapping(value = "{id}")
-    public User findById(@Valid @PathVariable UUID id) {
+    public User findById(@Valid @PathVariable Long id) {
         return iUserService.findById(id);
     }
 
     @DeleteMapping(value = "{id}")
-    public ResponseEntity<User> delete(@Valid @PathVariable UUID id) {
+    public ResponseEntity<User> delete(@Valid @PathVariable Long id) {
          iUserService.delete(id);
         return ResponseEntity.noContent().build();
     }
