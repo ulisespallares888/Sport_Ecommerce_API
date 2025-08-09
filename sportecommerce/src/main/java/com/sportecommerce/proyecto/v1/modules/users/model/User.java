@@ -33,7 +33,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role = Role.CUSTOMER;
@@ -49,5 +48,4 @@ public class User {
 
     @Column
     private String city;
-
 }

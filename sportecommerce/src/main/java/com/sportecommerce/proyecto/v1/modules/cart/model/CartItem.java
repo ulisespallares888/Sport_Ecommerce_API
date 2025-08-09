@@ -28,4 +28,12 @@ public class CartItem {
 
     @Column(nullable = false)
     private int quantity;
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+        if (cart != null && !cart.getItems().contains(this)) {
+            cart.getItems().add(this);
+        }
+    }
+
 }

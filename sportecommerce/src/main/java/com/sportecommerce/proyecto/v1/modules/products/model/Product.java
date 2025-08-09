@@ -56,5 +56,20 @@ public class Product {
         this.images.remove(imagen);
         imagen.setProduct(null);
     }
+
+    public void addCategory(Category category) {
+
+        if(!categories.contains(category)) {
+
+            if (this.categories == null) {
+                this.categories = new ArrayList<>();
+            }
+            this.categories.add(category);
+
+            if (!category.getProducts().contains(this)) {
+                category.getProducts().add(this);
+            }
+        }
+    }
 }
 

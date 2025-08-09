@@ -32,4 +32,20 @@ public class WishList {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products;
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+        product.getWishLists().add(this);
+    }
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+        product.getWishLists().remove(this);
+    }
+    public void clearProducts() {
+        for (Product product : this.products) {
+            product.getWishLists().remove(this);
+        }
+        this.products.clear();
+    }
+
 }

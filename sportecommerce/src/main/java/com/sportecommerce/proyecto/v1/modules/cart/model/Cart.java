@@ -27,4 +27,24 @@ public class Cart {
     private List<CartItem> items = new ArrayList<>();
 
     private boolean checkedOut = false; // True cuando se convierte en una orden
+
+    public void addItem(CartItem item) {
+        items.add(item);
+        item.setCart(this);
+    }
+    public void removeItem(CartItem item) {
+        items.remove(item);
+        item.setCart(null);
+    }
+    public void clearItems() {
+        for (CartItem item : items) {
+            item.setCart(null);
+        }
+        items.clear();
+    }
+    public double getTotalPrice() {
+        return items.stream()
+                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .sum();
+    }
 }

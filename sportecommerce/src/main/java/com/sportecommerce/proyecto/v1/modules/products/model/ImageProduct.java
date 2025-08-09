@@ -23,4 +23,11 @@ public class ImageProduct {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    public void setProduct(Product product) {
+        this.product = product;
+        if (product != null && !product.getImages().contains(this)) {
+            product.getImages().add(this);
+        }
+    }
+
 }
