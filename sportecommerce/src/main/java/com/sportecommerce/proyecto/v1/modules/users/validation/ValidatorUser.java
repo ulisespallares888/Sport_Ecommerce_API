@@ -10,8 +10,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ValidatorUser {
-    public static void validateUserDTORequest(UserDTORequest userDTORequest,
-                                        IUserRepository iUserRepository) {
+
+
+    public static void validateUserDTORequest(UserDTORequest userDTORequest) {
         boolean isUserDTORequestNull = Stream.of(
                 userDTORequest.getName(),
                 userDTORequest.getLastName(),
@@ -26,9 +27,6 @@ public class ValidatorUser {
         }
         if (userDTORequest.getLastName() == null || userDTORequest.getLastName().isBlank()) {
             throw new InvalidRequestException("The last name cannot be null or empty");
-        }
-        if (iUserRepository.existsByEmail(userDTORequest.getEmail())) {
-            throw new DuplicateResourceException("The user already exists with the email: %s".formatted(userDTORequest.getEmail()));
         }
         if (userDTORequest.getEmail() == null || userDTORequest.getEmail().isBlank()) {
             throw new InvalidRequestException("The email cannot be null or empty");
