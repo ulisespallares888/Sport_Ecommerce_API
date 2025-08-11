@@ -1,6 +1,7 @@
 package com.sportecommerce.proyecto.v1.modules.users.controller;
 
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
+import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
 import jakarta.validation.Valid;
@@ -76,6 +77,17 @@ public class UserController {
 
         User userSave = iUserService.create(userDTORequest);
         return ResponseEntity.ok(userSave);
+    }
+
+    @PutMapping(value = "{id}")
+    public ResponseEntity<UserDTOResponse> update(
+            @Valid @PathVariable Long id,
+            @RequestBody UserDTORequest userDTORequest) {
+
+        ValidatorUser.validateUserDTORequest(userDTORequest);
+
+        UserDTOResponse userDTOResponse = iUserService.update(id, userDTORequest);
+        return ResponseEntity.ok(userDTOResponse);
     }
 
 }

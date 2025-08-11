@@ -19,6 +19,8 @@ public class ValidatorUser {
                 userDTORequest.getEmail()
         ).allMatch(Objects::isNull);
 
+
+
         if (isUserDTORequestNull) {
             throw new InvalidRequestException("The user request cannot be null");
         }
