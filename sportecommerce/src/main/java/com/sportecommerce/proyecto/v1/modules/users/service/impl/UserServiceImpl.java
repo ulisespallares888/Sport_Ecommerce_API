@@ -11,10 +11,15 @@ import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidReques
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -24,11 +29,29 @@ public class UserServiceImpl implements IUserService {
 
     private final IUserRepository iUserRepository;
 
+    /*
+    @Cacheable("usuarios")
     @Override
     public Page<User> findAll(Pageable pageable) {
-        Page<User> userPage = iUserRepository.findAll(pageable);
-        return userPage;
+        return iUserRepository.findAll(pageable);
     }
+    */
+
+    @Cacheable("usuarios")
+    public List<User> findAllUsers() {
+        return iUserRepository.findAll();
+    }
+
+    public Page<User> findAll(Pageable pageable) {
+        List<User> users = findAllUsers();
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), users.size());
+
+        List<User> pageContent = users.subList(start, end);
+
+        return new PageImpl<>(pageContent, pageable, users.size());
+    }
+
     @Override
     public User findById(Long id) {
         return iUserRepository.findById(id)
@@ -36,6 +59,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @CacheEvict(value = "usuarios", allEntries = true)
     public User create(UserDTORequest userDTORequest) {
 
         if(iUserRepository.findByEmail(userDTORequest.getEmail()) != null) {
@@ -43,11 +67,12 @@ public class UserServiceImpl implements IUserService {
                     "The user already exists with the email: %s".formatted(userDTORequest.getEmail()));
         }
         User userSave = MapperUser.INSTANCIA.userDTOToUser(userDTORequest);
-
-        return iUserRepository.save(userSave);
+        iUserRepository.save(userSave);
+        return userSave;
     }
 
     @Override
+    @CacheEvict(value = "usuarios", allEntries = true)
     public void delete(Long id) {
         User user = iUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no found with ID = %s".formatted(id)));
@@ -55,23 +80,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @CacheEvict(value = "usuarios", allEntries = true)
     public UserDTOResponse update(Long id, UserDTORequest userDTORequest) {
-
-        if(!id.equals(userDTORequest.getId()))
-            throw new InvalidRequestException("The ID in the path does not match the ID in the request body");
 
         User usertoUpdate = iUserRepository.findById(id)
                 .orElseThrow( () -> new ResourceNotFoundException("User not found with ID = %s".formatted(id)));
 
-        UserDTOResponse userDTOResponse = new UserDTOResponse();
+        usertoUpdate = MapperUser.INSTANCIA.userDTOToUser(userDTORequest);
+        iUserRepository.save(usertoUpdate);
 
-        if(usertoUpdate != null){
-            usertoUpdate = MapperUser.INSTANCIA.userDTOToUser(userDTORequest);
-            iUserRepository.save(usertoUpdate);
-             userDTOResponse = MapperUser.INSTANCIA.userToUserDTO(usertoUpdate);
-        }
-
-        return userDTOResponse;
+        return MapperUser.INSTANCIA.userToUserDTO(usertoUpdate);
     }
 
 

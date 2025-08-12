@@ -5,12 +5,15 @@ import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.JsonPath;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -18,6 +21,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sportecommerce.proyecto.v1.modules.users.validation.ValidatorUser;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,9 +35,18 @@ public class UserController {
     private final IUserService iUserService;
     private final PagedResourcesAssembler<User> pagedResourcesAssembler;
 
+    private PagedModel<EntityModel<User>> toPagedModel(Page<User> users) {
+        return pagedResourcesAssembler.toModel(users, user -> {
+            EntityModel<User> usuarioEntityModel = EntityModel.of(user);
+            usuarioEntityModel.add(
+                    WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+                            .findById(user.getId())).withSelfRel());
+            return usuarioEntityModel;
+        });
+    }
 
-    @GetMapping(value = "")
-    public ResponseEntity<PagedModel<EntityModel<User>>> findAll(
+    @GetMapping
+    public ResponseEntity<PagedModel<EntityModel<User>>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
@@ -45,18 +59,11 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size, sortOrder);
         Page<User> users = iUserService.findAll(pageable);
 
+        if (users.isEmpty()) {
+            return ResponseEntity.ok(PagedModel.empty());
+        }
+
         return ResponseEntity.ok(toPagedModel(users));
-    }
-
-
-    private PagedModel<EntityModel<User>> toPagedModel(Page<User> users) {
-        return pagedResourcesAssembler.toModel(users, user -> {
-            EntityModel<User> usuarioEntityModel = EntityModel.of(user);
-            usuarioEntityModel.add(
-                    WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-                            .findById(user.getId())).withSelfRel());
-            return usuarioEntityModel;
-        });
     }
 
     @GetMapping(value = "{id}")
@@ -76,6 +83,7 @@ public class UserController {
         ValidatorUser.validateUserDTORequest(userDTORequest);
 
         User userSave = iUserService.create(userDTORequest);
+
         return ResponseEntity.ok(userSave);
     }
 

@@ -5,6 +5,9 @@ import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 public interface IUserService {
     Page<User> findAll(Pageable pageable);

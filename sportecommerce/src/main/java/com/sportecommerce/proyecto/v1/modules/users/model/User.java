@@ -48,4 +48,6 @@ public class User {
 
     @Column
     private String city;
+    @Version
+    private Integer version;
 }

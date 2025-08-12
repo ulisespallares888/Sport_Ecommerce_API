@@ -12,7 +12,6 @@ public interface MapperUser {
 
     MapperUser INSTANCIA = Mappers.getMapper(MapperUser.class);
 
-    @Mapping(source = "id", target="id")
     @Mapping(source = "name", target="name")
     @Mapping(source = "lastName", target="lastName")
     @Mapping(source = "typeUser", target="typeUser")
@@ -20,11 +19,11 @@ public interface MapperUser {
     @Mapping(source = "role", target="role")
     UserDTOResponse userToUserDTO(User user);
 
-    @Mapping(source = "id", target="id")
     @Mapping(source = "name", target="name")
     @Mapping(source = "lastName", target="lastName")
     @Mapping(source = "typeUser", target="typeUser")
     @Mapping(target = "role", expression = "java(com.sportecommerce.proyecto.v1.modules.users.model.Role.CUSTOMER)")
+    @Mapping(source = "version", target="version")
     User userDTOToUser(UserDTORequest userDTORequest);
 
 
