@@ -37,11 +37,12 @@ public class UserServiceImpl implements IUserService {
     }
     */
 
-    @Cacheable("usuarios")
+
     public List<User> findAllUsers() {
         return iUserRepository.findAll();
     }
 
+    @Cacheable("usuarios")
     public Page<User> findAll(Pageable pageable) {
         List<User> users = findAllUsers();
         int start = (int) pageable.getOffset();
