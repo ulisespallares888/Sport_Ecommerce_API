@@ -6,12 +6,9 @@ import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
-import org.springframework.data.web.JsonPath;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -20,9 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sportecommerce.proyecto.v1.modules.users.validation.ValidatorUser;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -56,10 +50,8 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        // Obtenemos el DTO desde el servicio (cacheado en Redis)
         PageDTO<User> pageDTO = iUserService.findAll(pageable);
 
-        // Reconstruimos Page<User> para Hateoas
         Page<User> users = new PageImpl<>(
                 pageDTO.getContent(),
                 PageRequest.of(pageDTO.getPage(), pageDTO.getSize(), sortOrder),

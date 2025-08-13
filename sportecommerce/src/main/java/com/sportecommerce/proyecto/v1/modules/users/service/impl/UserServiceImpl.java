@@ -8,7 +8,6 @@ import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.service.IUserService;
 import com.sportecommerce.proyecto.v1.modules.users.repository.IUserRepository;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.DuplicateResourceException;
-import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidRequestException;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +42,6 @@ public class UserServiceImpl implements IUserService {
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), users.size());
 
-        // Convertimos a ArrayList para que Jackson pueda deserializarlo
         List<User> pageContent = new ArrayList<>(users.subList(start, end));
 
         return new PageDTO<>(pageContent, pageable.getPageNumber(), pageable.getPageSize(), users.size());
