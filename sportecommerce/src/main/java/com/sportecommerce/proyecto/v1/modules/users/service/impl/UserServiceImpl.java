@@ -1,5 +1,6 @@
 package com.sportecommerce.proyecto.v1.modules.users.service.impl;
 
+import com.sportecommerce.proyecto.v1.modules.users.dto.PageDTO;
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.mapper.MapperUser;
@@ -12,6 +13,7 @@ import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFo
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -29,38 +32,34 @@ public class UserServiceImpl implements IUserService {
 
     private final IUserRepository iUserRepository;
 
-    /*
-    @Cacheable("usuarios")
+
     @Override
-    public Page<User> findAll(Pageable pageable) {
-        return iUserRepository.findAll(pageable);
-    }
-    */
-
-
     public List<User> findAllUsers() {
         return iUserRepository.findAll();
     }
 
-    @Cacheable("usuarios")
-    public Page<User> findAll(Pageable pageable) {
+    @Cacheable(value = "users", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort.toString()")
+    public PageDTO<User> findAll(Pageable pageable) {
         List<User> users = findAllUsers();
+
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), users.size());
 
-        List<User> pageContent = users.subList(start, end);
+        // Convertimos a ArrayList para que Jackson pueda deserializarlo
+        List<User> pageContent = new ArrayList<>(users.subList(start, end));
 
-        return new PageImpl<>(pageContent, pageable, users.size());
+        return new PageDTO<>(pageContent, pageable.getPageNumber(), pageable.getPageSize(), users.size());
     }
 
     @Override
+    @Cacheable(value = "user", key = "#id")
     public User findById(Long id) {
         return iUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no found with ID = %s".formatted(id)));
     }
 
     @Override
-    @CacheEvict(value = "usuarios", allEntries = true)
+    @CachePut(value = "user", key = "#result.id")
     public User create(UserDTORequest userDTORequest) {
 
         if(iUserRepository.findByEmail(userDTORequest.getEmail()) != null) {
@@ -73,7 +72,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @CacheEvict(value = "usuarios", allEntries = true)
+    @CacheEvict(value = "userCache", key = "#id")
     public void delete(Long id) {
         User user = iUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no found with ID = %s".formatted(id)));
@@ -81,13 +80,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @CacheEvict(value = "usuarios", allEntries = true)
+    @CachePut(value = "userCache", key = "#id")
     public UserDTOResponse update(Long id, UserDTORequest userDTORequest) {
 
         User usertoUpdate = iUserRepository.findById(id)
                 .orElseThrow( () -> new ResourceNotFoundException("User not found with ID = %s".formatted(id)));
 
         usertoUpdate = MapperUser.INSTANCIA.userDTOToUser(userDTORequest);
+        usertoUpdate.setId(id);
         iUserRepository.save(usertoUpdate);
 
         return MapperUser.INSTANCIA.userToUserDTO(usertoUpdate);

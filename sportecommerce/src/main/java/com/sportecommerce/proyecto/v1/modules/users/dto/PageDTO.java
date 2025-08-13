@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDTORequest {
-    private String name;
-    private String lastName;
-    private String typeUser;
-    private String email;
+public class PageDTO<T> {
+    private List<T> content;
+    private int page;
+    private int size;
+    private long totalElements;
 }

@@ -13,7 +13,6 @@ import lombok.*;
 @Table(name = "users")
 public class User {
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false, unique = true)
     private Long id;
@@ -48,6 +47,5 @@ public class User {
 
     @Column
     private String city;
-    @Version
-    private Integer version;
+
 }

@@ -23,7 +23,6 @@ public interface MapperUser {
     @Mapping(source = "lastName", target="lastName")
     @Mapping(source = "typeUser", target="typeUser")
     @Mapping(target = "role", expression = "java(com.sportecommerce.proyecto.v1.modules.users.model.Role.CUSTOMER)")
-    @Mapping(source = "version", target="version")
     User userDTOToUser(UserDTORequest userDTORequest);
 
 
