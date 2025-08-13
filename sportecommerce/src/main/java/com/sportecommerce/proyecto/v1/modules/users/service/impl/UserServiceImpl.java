@@ -60,6 +60,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @CachePut(value = "user", key = "#result.id")
+    @CacheEvict(value = "users", allEntries = true)
     public User create(UserDTORequest userDTORequest) {
 
         if(iUserRepository.findByEmail(userDTORequest.getEmail()) != null) {
@@ -72,7 +73,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @CacheEvict(value = "userCache", key = "#id")
+    @CacheEvict(value = "users", allEntries = true)
     public void delete(Long id) {
         User user = iUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User no found with ID = %s".formatted(id)));
@@ -80,7 +81,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @CachePut(value = "userCache", key = "#id")
+    @CachePut(value = "user", key = "#id")
+    @CacheEvict(value = "users", allEntries = true)
     public UserDTOResponse update(Long id, UserDTORequest userDTORequest) {
 
         User usertoUpdate = iUserRepository.findById(id)
