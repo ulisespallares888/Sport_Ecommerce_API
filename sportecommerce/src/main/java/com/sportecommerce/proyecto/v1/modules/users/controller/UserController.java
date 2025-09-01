@@ -25,11 +25,11 @@ import com.sportecommerce.proyecto.v1.modules.users.validation.ValidatorUser;
 public class UserController {
 
     private final IUserService iUserService;
-    private final PagedResourcesAssembler<User> pagedResourcesAssembler;
+    private final PagedResourcesAssembler<UserDTOResponse> pagedResourcesAssembler;
 
-    private PagedModel<EntityModel<User>> toPagedModel(Page<User> users) {
+    private PagedModel<EntityModel<UserDTOResponse>> toPagedModel(Page<UserDTOResponse> users) {
         return pagedResourcesAssembler.toModel(users, user -> {
-            EntityModel<User> usuarioEntityModel = EntityModel.of(user);
+            EntityModel<UserDTOResponse> usuarioEntityModel = EntityModel.of(user);
             usuarioEntityModel.add(
                     WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
                             .findById(user.getId())).withSelfRel());
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<PagedModel<EntityModel<User>>> getAllUsers(
+    public ResponseEntity<PagedModel<EntityModel<UserDTOResponse>>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
@@ -50,9 +50,9 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(page, size, sortOrder);
 
-        PageDTO<User> pageDTO = iUserService.findAll(pageable);
+        PageDTO<UserDTOResponse> pageDTO = iUserService.findAll(pageable);
 
-        Page<User> users = new PageImpl<>(
+        Page<UserDTOResponse> users = new PageImpl<>(
                 pageDTO.getContent(),
                 PageRequest.of(pageDTO.getPage(), pageDTO.getSize(), sortOrder),
                 pageDTO.getTotalElements()

@@ -15,10 +15,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,21 +30,21 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository iUserRepository;
 
 
-    @Override
-    public List<User> findAllUsers() {
-        return iUserRepository.findAll();
-    }
 
     @Cacheable(value = "users", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort.toString()")
-    public PageDTO<User> findAll(Pageable pageable) {
-        List<User> users = findAllUsers();
+    public PageDTO<UserDTOResponse> findAll(Pageable pageable) {
+        Page<User> usersPage = iUserRepository.findAll(pageable);
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min(start + pageable.getPageSize(), users.size());
+        List<UserDTOResponse> dtoContent = usersPage.getContent().stream()
+                .map(MapperUser.INSTANCIA::userToUserDTO)
+                .toList();
 
-        List<User> pageContent = new ArrayList<>(users.subList(start, end));
-
-        return new PageDTO<>(pageContent, pageable.getPageNumber(), pageable.getPageSize(), users.size());
+        return new PageDTO<>(
+                dtoContent,
+                usersPage.getNumber(),
+                usersPage.getSize(),
+                usersPage.getTotalElements()
+        );
     }
 
     @Override
