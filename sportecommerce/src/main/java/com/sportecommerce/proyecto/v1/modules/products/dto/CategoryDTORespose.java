@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ImageProductDTOResponse {
+public class CategoryDTORespose {
     @JsonIgnore
-    private int id;
-    private String url;
+    private Long id;
+    private String name;
 }

@@ -17,5 +17,5 @@ public class ProductDTOResponse {
     private String description;
     private Double price;
     private List<ImageProductDTOResponse> images;
-    private List<Category> categories;
+    private List<CategoryDTORespose> categories;
 }

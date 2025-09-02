@@ -1,5 +1,7 @@
 package com.sportecommerce.proyecto.v1.modules.categories.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sportecommerce.proyecto.v1.modules.products.model.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -63,7 +63,7 @@ public class ProductController {
         if (productDTOResponsePage.isEmpty()){
             return ResponseEntity.ok(PagedModel.empty());
         }
-        log.info(toPagedModel(productDTOResponsePage).toString());
+
         return ResponseEntity.ok(toPagedModel(productDTOResponsePage));
     }
 

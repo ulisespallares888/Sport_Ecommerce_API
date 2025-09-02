@@ -31,6 +31,7 @@ public class Product {
     private Double price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ImageProduct> images = new ArrayList<>();
 
     @ManyToMany
@@ -42,6 +43,7 @@ public class Product {
     private List<Category> categories;
 
     @ManyToMany(mappedBy = "products")
+    @JsonManagedReference
     private List<WishList> wishLists;
 
 
