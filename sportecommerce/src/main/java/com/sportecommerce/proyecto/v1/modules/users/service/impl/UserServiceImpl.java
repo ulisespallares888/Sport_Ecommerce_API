@@ -1,6 +1,6 @@
 package com.sportecommerce.proyecto.v1.modules.users.service.impl;
 
-import com.sportecommerce.proyecto.v1.modules.users.dto.PageDTO;
+import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
 import com.sportecommerce.proyecto.v1.modules.users.mapper.MapperUser;

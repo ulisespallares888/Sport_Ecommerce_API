@@ -1,5 +1,6 @@
 package com.sportecommerce.proyecto.v1.modules.products.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
 import com.sportecommerce.proyecto.v1.modules.wishlist.model.WishList;
 import jakarta.persistence.*;

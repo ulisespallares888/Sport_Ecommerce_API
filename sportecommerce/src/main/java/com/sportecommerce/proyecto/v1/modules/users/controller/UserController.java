@@ -1,6 +1,6 @@
 package com.sportecommerce.proyecto.v1.modules.users.controller;
 
-import com.sportecommerce.proyecto.v1.modules.users.dto.PageDTO;
+import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTORequest;
 import com.sportecommerce.proyecto.v1.modules.users.dto.UserDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.users.model.User;
@@ -27,12 +27,12 @@ public class UserController {
     private final IUserService iUserService;
     private final PagedResourcesAssembler<UserDTOResponse> pagedResourcesAssembler;
 
-    private PagedModel<EntityModel<UserDTOResponse>> toPagedModel(Page<UserDTOResponse> users) {
-        return pagedResourcesAssembler.toModel(users, user -> {
-            EntityModel<UserDTOResponse> usuarioEntityModel = EntityModel.of(user);
+    private PagedModel<EntityModel<UserDTOResponse>> toPagedModel(Page<UserDTOResponse> userDTOResponsePage) {
+        return pagedResourcesAssembler.toModel(userDTOResponsePage, userDTOResponse -> {
+            EntityModel<UserDTOResponse> usuarioEntityModel = EntityModel.of(userDTOResponse);
             usuarioEntityModel.add(
                     WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-                            .findById(user.getId())).withSelfRel());
+                            .findById(userDTOResponse.getId())).withSelfRel());
             return usuarioEntityModel;
         });
     }

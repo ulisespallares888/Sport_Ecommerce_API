@@ -1,10 +1,17 @@
 package com.sportecommerce.proyecto.v1.modules.products.controller;
 
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
+import com.sportecommerce.proyecto.v1.modules.products.service.IProductService;
+import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -12,9 +19,58 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ProductController {
 
-    @GetMapping("")
-    public String hello() {
-        return "Hello from ProductController";
+    private final IProductService  productService;
+    private final PagedResourcesAssembler<ProductDTOResponse>  pagedResourcesAssembler;
+
+    private PagedModel<EntityModel<ProductDTOResponse>> toPagedModel(Page<ProductDTOResponse> productDTOResponsePage) {
+        return pagedResourcesAssembler.toModel(
+                productDTOResponsePage, productDTOResponse ->{
+                    EntityModel<ProductDTOResponse> productDTOResponseEntityModel = EntityModel.of(productDTOResponse);
+
+                    productDTOResponseEntityModel.add(
+                            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ProductController.class)
+                                    .findById(productDTOResponse.getId())).withSelfRel());
+                    return productDTOResponseEntityModel;
+                }
+        );
+    }
+
+
+    @GetMapping(value="")
+    public ResponseEntity<PagedModel<EntityModel<ProductDTOResponse>>> getAllTasks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "desc") String direction) {
+
+        Sort sortOrder = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sort).descending()
+                : Sort.by(sort).ascending();
+
+        Pageable pageable = PageRequest.of(page,size,sortOrder);
+
+        PageDTO<ProductDTOResponse>  pageDTO = productService.findAll(pageable);
+
+        Page<ProductDTOResponse> productDTOResponsePage = new PageImpl<>(
+                pageDTO.getContent(),
+                PageRequest.of(
+                        pageDTO.getPage(),
+                        pageDTO.getSize(),
+                        sortOrder),
+                pageDTO.getTotalElements()
+        );
+
+        if (productDTOResponsePage.isEmpty()){
+            return ResponseEntity.ok(PagedModel.empty());
+        }
+        log.info(toPagedModel(productDTOResponsePage).toString());
+        return ResponseEntity.ok(toPagedModel(productDTOResponsePage));
+    }
+
+
+    @GetMapping(value="{id}")
+    public ProductDTOResponse findById(@PathVariable Long id) {
+        return null;
     }
 
     /*

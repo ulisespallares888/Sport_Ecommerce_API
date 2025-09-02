@@ -1,4 +1,4 @@
-package com.sportecommerce.proyecto.v1.modules.users.dto;
+package com.sportecommerce.proyecto.v1.shared.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
