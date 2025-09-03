@@ -40,8 +40,13 @@ public class ProductController {
     public ResponseEntity<PagedModel<EntityModel<ProductDTOResponse>>> getAllTasks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "name") String sort,
             @RequestParam(defaultValue = "desc") String direction) {
+
+        int maxsize = 100;
+        if(size>maxsize){
+            size = maxsize;
+        }
 
         Sort sortOrder = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sort).descending()
@@ -49,7 +54,7 @@ public class ProductController {
 
         Pageable pageable = PageRequest.of(page,size,sortOrder);
 
-        PageDTO<ProductDTOResponse>  pageDTO = productService.findAll(pageable);
+        PageDTO<ProductDTOResponse> pageDTO = productService.findAll(pageable);
 
         Page<ProductDTOResponse> productDTOResponsePage = new PageImpl<>(
                 pageDTO.getContent(),

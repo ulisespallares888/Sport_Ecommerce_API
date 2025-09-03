@@ -1,6 +1,6 @@
 package com.sportecommerce.proyecto.v1.modules.products.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
 import com.sportecommerce.proyecto.v1.modules.wishlist.model.WishList;
 import jakarta.persistence.*;
@@ -31,7 +31,6 @@ public class Product {
     private Double price;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<ImageProduct> images = new ArrayList<>();
 
     @ManyToMany
@@ -40,11 +39,10 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
     @ManyToMany(mappedBy = "products")
-    @JsonManagedReference
-    private List<WishList> wishLists;
+    private List<WishList> wishLists =  new ArrayList<>();
 
 
 
