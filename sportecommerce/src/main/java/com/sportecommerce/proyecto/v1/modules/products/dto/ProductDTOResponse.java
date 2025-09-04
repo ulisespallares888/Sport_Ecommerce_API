@@ -1,6 +1,7 @@
 package com.sportecommerce.proyecto.v1.modules.products.dto;
 
 
+import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTORespose;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

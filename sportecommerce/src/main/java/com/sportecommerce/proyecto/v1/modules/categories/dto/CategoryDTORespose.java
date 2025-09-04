@@ -1,4 +1,4 @@
-package com.sportecommerce.proyecto.v1.modules.products.dto;
+package com.sportecommerce.proyecto.v1.modules.categories.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
