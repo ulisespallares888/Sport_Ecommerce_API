@@ -40,7 +40,7 @@ public class Product {
             mappedBy = "product",
             cascade = CascadeType.ALL,
             orphanRemoval = true, fetch =
-            FetchType.EAGER
+            FetchType.LAZY
     )
     private List<ImageProduct> images = new ArrayList<>();
 
