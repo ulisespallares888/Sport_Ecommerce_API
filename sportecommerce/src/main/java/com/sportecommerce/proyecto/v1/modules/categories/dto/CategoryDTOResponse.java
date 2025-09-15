@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CategoryDTORespose {
+public class CategoryDTOResponse {
     @JsonIgnore
     private Long id;
     private String name;
