@@ -22,6 +22,7 @@ public class ProductController {
     private final IProductService  productService;
     private final PagedResourcesAssembler<ProductDTOResponse>  pagedResourcesAssembler;
 
+
     private PagedModel<EntityModel<ProductDTOResponse>> toPagedModel(Page<ProductDTOResponse> productDTOResponsePage) {
         return pagedResourcesAssembler.toModel(
                 productDTOResponsePage, productDTOResponse ->{
@@ -41,7 +42,7 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sort,
-            @RequestParam(defaultValue = "desc") String direction) {
+            @RequestParam(defaultValue = "desc") String direction){
 
         int maxsize = 100;
         if(size>maxsize){
@@ -75,13 +76,11 @@ public class ProductController {
 
     @GetMapping(value="{id}")
     public ProductDTOResponse findById(@PathVariable Long id) {
-        return null;
+        return productService.findById(id);
     }
 
     /*
-    private final ProductoService productoService;
 
-    private static final String MEDIA_DIR = "/app/media";
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> crearProducto(

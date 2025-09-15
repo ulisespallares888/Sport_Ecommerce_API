@@ -1,11 +1,10 @@
 package com.sportecommerce.proyecto.v1.modules.products.dto;
 
 
-import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTORespose;
+import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTOResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,5 +16,5 @@ public class ProductDTOResponse {
     private String description;
     private Double price;
     private List<ImageProductDTOResponse> images;
-    private List<CategoryDTORespose> categories;
+    private List<CategoryDTOResponse> categories;
 }

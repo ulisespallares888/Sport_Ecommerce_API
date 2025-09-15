@@ -7,8 +7,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products", indexes = {
@@ -33,10 +36,15 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch =
+            FetchType.EAGER
+    )
     private List<ImageProduct> images = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "products_categories",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -44,8 +52,8 @@ public class Product {
     )
     private List<Category> categories = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "products")
-    private List<WishList> wishLists =  new ArrayList<>();
+    @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
+    private Set<WishList> wishLists =  new HashSet<>();
 
 
 
@@ -65,9 +73,6 @@ public class Product {
 
         if(!categories.contains(category)) {
 
-            if (this.categories == null) {
-                this.categories = new ArrayList<>();
-            }
             this.categories.add(category);
 
             if (!category.getProducts().contains(this)) {

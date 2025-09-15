@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface IProductService {
     PageDTO<ProductDTOResponse> findAll(Pageable pageable);
     ProductDTOResponse findById(Long id);
-    ProductDTOResponse create(ProductDTOResponse productDTOResponse);
+    ProductDTOResponse create(ProductDTORequest productDTORequest);
     void delete (Integer id);
     ProductDTOResponse update(Long id, ProductDTORequest productDTORequest);
 }

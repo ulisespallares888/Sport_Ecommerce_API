@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class ImageProductDTOResponse {
     @JsonIgnore
-    private int id;
+    private long id;
     private String url;
 }

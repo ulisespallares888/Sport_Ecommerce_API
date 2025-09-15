@@ -25,7 +25,7 @@ public class WishList {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany
+    @ManyToMany(fetch =  FetchType.LAZY)
     @JoinTable(
             name = "wishlists_products",
             joinColumns = @JoinColumn(name = "wishlist_id"),
