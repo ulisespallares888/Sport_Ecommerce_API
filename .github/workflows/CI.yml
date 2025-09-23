@@ -57,7 +57,7 @@ jobs:
 
       - name: Build with Maven
         #run: cd API && mvn -B clean package --file pom.xml -DskipTests
-        run: cd API && mvn -B clean package --file pom.xml
+        run: cd sportecommerce && mvn -B clean package --file pom.xml
 
       - name: Run Tests
         env:
@@ -66,7 +66,7 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: root
           SPRING_REDIS_HOST: 127.0.0.1
           SPRING_REDIS_PORT: 6379
-        run: cd API && mvn test
+        run: cd sportecommerce && mvn test
 
       - name: Upload coverage to Codacy
         env:
