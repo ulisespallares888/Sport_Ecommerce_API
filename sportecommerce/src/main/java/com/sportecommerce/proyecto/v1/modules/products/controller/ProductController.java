@@ -1,6 +1,10 @@
 package com.sportecommerce.proyecto.v1.modules.products.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOForm;
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTORequest;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
+import com.sportecommerce.proyecto.v1.modules.products.model.Product;
 import com.sportecommerce.proyecto.v1.modules.products.service.IProductService;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +14,15 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+
 
 @Slf4j
 @RestController
@@ -79,20 +90,22 @@ public class ProductController {
         return productService.findById(id);
     }
 
-    /*
-
-
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> crearProducto(
-            @RequestPart("datos") ProductoDTO datos,
-            @RequestPart("imagenes") MultipartFile[] imagenes) throws IOException {
+    public ResponseEntity<?> createProduct(
+            @RequestPart("data") ProductDTORequest data,
+            @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
 
-        Producto producto = new Producto();
+        System.out.println(data);
+        // data y images listos para usar
+        return ResponseEntity.ok("Producto creado");
+    }
+/*
+        Product producto = new Product();
         producto.setNombre(datos.getNombre());
         producto.setDescripcion(datos.getDescripcion());
         producto.setPrecio(datos.getPrecio());
 
-        for (MultipartFile imagen : imagenes) {
+        for (MultipartFile imagen : images) {
             if (imagen.isEmpty()) continue;
 
             String extension = getExtension(imagen.getOriginalFilename());
@@ -105,7 +118,7 @@ public class ProductController {
             producto.addImagen(url);
         }
 
-        Producto guardado = productoService.guardarProducto(producto);
+        Product guardado = productService.guardarProducto(producto);
         return ResponseEntity.ok(Map.of("id", guardado.getId(), "imagenes", guardado.getImagenes()));
     }
 
@@ -127,7 +140,7 @@ public class ProductController {
         int dot = filename.lastIndexOf('.');
         return (dot == -1) ? "" : filename.substring(dot + 1);
     }
-}
-
      */
 }
+
+
