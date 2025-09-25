@@ -1,12 +1,11 @@
 package com.sportecommerce.proyecto.v1.modules.products.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOForm;
+
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTORequest;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
-import com.sportecommerce.proyecto.v1.modules.products.model.Product;
 import com.sportecommerce.proyecto.v1.modules.products.service.IProductService;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -92,12 +91,13 @@ public class ProductController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createProduct(
-            @RequestPart("data") ProductDTORequest data,
+            @Valid @RequestPart("data") ProductDTORequest data,
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
 
         System.out.println(data);
-        // data y images listos para usar
-        return ResponseEntity.ok("Producto creado");
+
+
+        return ResponseEntity.ok(productService.create(data,images));
     }
 /*
         Product producto = new Product();
@@ -141,6 +141,13 @@ public class ProductController {
         return (dot == -1) ? "" : filename.substring(dot + 1);
     }
      */
+
+    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addImages(
+            @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
+
+        return ResponseEntity.ok(productService.addImagesToProduct(images));
+    }
 }
 
 

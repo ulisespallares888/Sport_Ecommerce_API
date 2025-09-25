@@ -15,7 +15,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.sportecommerce.proyecto.v1.modules.users.validation.ValidatorUser;
+import com.sportecommerce.proyecto.v1.modules.users.validation.UserValidator;
 
 
 @Slf4j
@@ -81,7 +81,7 @@ public class UserController {
     @PostMapping(value = "")
     public ResponseEntity<User> create(@Valid @RequestBody UserDTORequest userDTORequest) {
 
-        ValidatorUser.validateUserDTORequest(userDTORequest);
+        UserValidator.validateUserDTORequest(userDTORequest);
 
         User userSave = iUserService.create(userDTORequest);
 
@@ -93,7 +93,7 @@ public class UserController {
             @Valid @PathVariable Long id,
             @RequestBody UserDTORequest userDTORequest) {
 
-        ValidatorUser.validateUserDTORequest(userDTORequest);
+        UserValidator.validateUserDTORequest(userDTORequest);
 
         UserDTOResponse userDTOResponse = iUserService.update(id, userDTORequest);
         return ResponseEntity.ok(userDTOResponse);

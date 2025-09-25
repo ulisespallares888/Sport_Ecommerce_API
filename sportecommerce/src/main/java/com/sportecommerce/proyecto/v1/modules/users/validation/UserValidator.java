@@ -7,7 +7,7 @@ import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidReques
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class ValidatorUser {
+public class UserValidator {
 
 
     public static void validateUserDTORequest(UserDTORequest userDTORequest) {

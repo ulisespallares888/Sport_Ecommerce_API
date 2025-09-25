@@ -6,14 +6,19 @@ import com.sportecommerce.proyecto.v1.modules.products.mapper.MapperProduct;
 import com.sportecommerce.proyecto.v1.modules.products.model.Product;
 import com.sportecommerce.proyecto.v1.modules.products.repository.IProductRepository;
 import com.sportecommerce.proyecto.v1.modules.products.service.IProductService;
+import com.sportecommerce.proyecto.v1.modules.products.validation.ProductValidator;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
+import jakarta.validation.Validation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -53,7 +58,8 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTOResponse create(ProductDTORequest productDTORequest) {
+    public ProductDTOResponse create(ProductDTORequest productDTORequest, MultipartFile[] images) {
+        ProductValidator.validateProductDTORequest(productDTORequest);
         return null;
     }
 
@@ -64,6 +70,11 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public ProductDTOResponse update(Long id, ProductDTORequest productDTORequest) {
+        return null;
+    }
+
+    @Override
+    public Object addImagesToProduct(MultipartFile[] images) {
         return null;
     }
 }
