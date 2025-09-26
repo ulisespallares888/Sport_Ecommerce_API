@@ -91,7 +91,7 @@ public class ProductController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createProduct(
-            @Valid @RequestPart("data") ProductDTORequest data,
+            @RequestPart("data") ProductDTORequest data,
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
 
         System.out.println(data);
@@ -142,11 +142,12 @@ public class ProductController {
     }
      */
 
-    @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "{id}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addImages(
+            @RequestPart(value = "id") Long id,
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
 
-        return ResponseEntity.ok(productService.addImagesToProduct(images));
+        return ResponseEntity.ok(productService.addImagesToProduct(id,images));
     }
 }
 

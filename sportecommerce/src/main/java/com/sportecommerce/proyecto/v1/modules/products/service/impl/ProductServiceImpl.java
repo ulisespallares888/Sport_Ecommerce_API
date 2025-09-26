@@ -1,5 +1,7 @@
 package com.sportecommerce.proyecto.v1.modules.products.service.impl;
 
+import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
+import com.sportecommerce.proyecto.v1.modules.categories.repository.ICategoryRepository;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTORequest;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.products.mapper.MapperProduct;
@@ -9,16 +11,15 @@ import com.sportecommerce.proyecto.v1.modules.products.service.IProductService;
 import com.sportecommerce.proyecto.v1.modules.products.validation.ProductValidator;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
-import jakarta.validation.Validation;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Text;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +28,7 @@ import java.util.List;
 public class ProductServiceImpl implements IProductService {
 
     private final IProductRepository productRepository;
-    private static final String MEDIA_DIR = "/sportecommerce/media/images";
+    private static final String MEDIA_DIR = "/sportecommerce/v1/media/images";
 
     @Override
     public PageDTO<ProductDTOResponse> findAll(Pageable pageable) {
@@ -60,7 +61,20 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductDTOResponse create(ProductDTORequest productDTORequest, MultipartFile[] images) {
         ProductValidator.validateProductDTORequest(productDTORequest);
-        return null;
+
+        Product product = MapperProduct.INSTANCE.productDTOResponseToProduct(productDTORequest);
+
+        /*
+        Crear un mapper de catagories
+        implementar create y findByName de Catagories
+
+         */
+        //product.addCategory(category);
+        //product.setCategories(product.getCategories());
+
+        productRepository.save(product);
+        log.info("Product Created with ID = {}".formatted(product.getId()));
+        return MapperProduct.INSTANCE.productToProductDTOResponse(product);
     }
 
     @Override
@@ -74,7 +88,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Object addImagesToProduct(MultipartFile[] images) {
+    public Object addImagesToProduct(Long id, MultipartFile[] images) {
         return null;
     }
 }

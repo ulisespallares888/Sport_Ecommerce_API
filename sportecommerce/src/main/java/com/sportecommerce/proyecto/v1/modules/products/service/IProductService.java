@@ -12,7 +12,7 @@ public interface IProductService {
     ProductDTOResponse create(ProductDTORequest productDTORequest, MultipartFile[] images);
     void delete (Integer id);
     ProductDTOResponse update(Long id, ProductDTORequest productDTORequest);
-    Object addImagesToProduct(MultipartFile[] images);
+    Object addImagesToProduct(Long id,MultipartFile[] images);
 }
 
 

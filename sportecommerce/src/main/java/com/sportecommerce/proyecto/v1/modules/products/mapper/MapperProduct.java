@@ -3,6 +3,7 @@ package com.sportecommerce.proyecto.v1.modules.products.mapper;
 import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ImageProductDTOResponse;
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTORequest;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.products.model.ImageProduct;
 import com.sportecommerce.proyecto.v1.modules.products.model.Product;
@@ -21,6 +22,13 @@ public interface MapperProduct {
 
     //@Mapping(source = "name",target = "name")
     //Product productDTOToProduct(ProductDTORequest productRequestDTO);
+
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "price", source = "price")
+    @Mapping(target = "categories", source = "categories")
+    Product productDTOResponseToProduct(ProductDTORequest productDTORequest);
+
 
 
     @Mapping(target = "id", source = "id")
