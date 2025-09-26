@@ -30,9 +30,9 @@ public class SwaggerConfig {
                         .description("Order Service API Description")
                         .version("1.0")
                         .contact(new Contact()
-                                .name("Codmind")
-                                .url("https://codmind.com")
-                                .email("apis@codmind.com")
+                                .name("Ulises Pallares")
+                                .url("https://github.com/ulisespallares888")
+                                .email("ulisespallares8@gmail.com")
                         )
                 );
     }
