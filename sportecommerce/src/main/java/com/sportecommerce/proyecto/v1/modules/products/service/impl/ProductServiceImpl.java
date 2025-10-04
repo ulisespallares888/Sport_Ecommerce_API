@@ -4,7 +4,6 @@ import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTORequest;
 import com.sportecommerce.proyecto.v1.modules.categories.mapper.MapperCategory;
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
 import com.sportecommerce.proyecto.v1.modules.categories.repository.ICategoryRepository;
-import com.sportecommerce.proyecto.v1.modules.categories.service.impl.CategoryServiceImpl;
 import com.sportecommerce.proyecto.v1.modules.categories.service.impl.CategoryServiceImpl.*;
 import com.sportecommerce.proyecto.v1.modules.categories.repository.ICategoryRepository.*;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTORequest;
@@ -33,7 +32,6 @@ public class ProductServiceImpl implements IProductService {
 
     private final IProductRepository productRepository;
     private static final String MEDIA_DIR = "/sportecommerce/v1/media/images";
-    private final CategoryServiceImpl categoryServiceImpl;
     private final ICategoryRepository categoryRepository;
 
     @Override
@@ -73,13 +71,12 @@ public class ProductServiceImpl implements IProductService {
         List<Category> categories = new ArrayList<>();
         for (CategoryDTORequest categoryDTORequest : productDTORequest.getCategories()) {
 
-            Category category = categoryRepository.findByName(categoryDTORequest.getName())
+            Category category = categoryRepository.findByNameAndActiveTrue(categoryDTORequest.getName())
                     .orElseGet(() -> {
                         Category newCategory = MapperCategory.INSTANCE.categoryDTORequestToCategory(categoryDTORequest);
                         newCategory.setName(newCategory.getName().toUpperCase());
                         return categoryRepository.save(newCategory);
                     });
-
             categories.add(category);
         }
 

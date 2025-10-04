@@ -12,13 +12,14 @@ import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.DuplicateReso
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidRequestException;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.parser.Part;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements ICategoryService {
@@ -27,7 +28,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public PageDTO<CategoryDTOResponse> findAll(Pageable pageable) {
-        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        Page<Category> categoryPage = categoryRepository.findAllByActiveTrue(pageable);
 
         List<CategoryDTOResponse> categoryDTOResponseList = categoryPage.getContent()
                 .stream()
@@ -45,7 +46,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public CategoryDTOResponse findByName(String name) {
-        Category category = categoryRepository.findByName(name).orElseThrow(
+        Category category = categoryRepository.findByNameAndActiveTrue(name).orElseThrow(
                 () -> new ResourceNotFoundException("Category with name " + name + " not found")
         );
         return MapperCategory.INSTANCE.categoryToCategoryDTOResponse(category);
@@ -66,7 +67,7 @@ public class CategoryServiceImpl implements ICategoryService {
             throw new InvalidRequestException("Category name cannot be empty or blank");
         }
 
-        if (categoryRepository.findByName(categoryDTORequest.getName()).isPresent()) {
+        if (categoryRepository.findByNameAndActiveTrue(categoryDTORequest.getName()).isPresent()) {
             throw new DuplicateResourceException("Category with name " + categoryDTORequest.getName() + " already exists");
         }
         else {
@@ -84,10 +85,12 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public void delete(String name) {
-        Category category = categoryRepository.findByName(name.toUpperCase()).orElseThrow(
+        Category category = categoryRepository.findByNameAndActiveTrue(name.toUpperCase()).orElseThrow(
                 () -> new ResourceNotFoundException("Category with name " + name + " not found")
         );
-        categoryRepository.delete(category);
+
+        category.setActive(false);
+        categoryRepository.save(category);
     }
 }
 

@@ -6,7 +6,6 @@ import com.sportecommerce.proyecto.v1.modules.categories.service.ICategoryServic
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
@@ -61,6 +60,11 @@ public class CategoryController {
 
     }
 
+    //@GetMapping(value = "/products")
+    //public ResponseEntity<CategoryDTOResponse> getCategoryByName(@PathVariable String name){
+    //    return ResponseEntity.ok(categoryService.findByName(name));
+    //}
+
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<CategoryDTOResponse> getCategoryByName(@PathVariable String name){
         return ResponseEntity.ok(categoryService.findByName(name));
@@ -76,8 +80,9 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.create(categoryDTORequest));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+    @DeleteMapping("/name/{name}")
+    public ResponseEntity<?> deleteCategory(@PathVariable String name){
+        categoryService.delete(name);
         return ResponseEntity.noContent().build();
     }
 
