@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 @Slf4j
@@ -48,7 +49,7 @@ public class ProductController {
 
 
     @GetMapping(value="")
-    public ResponseEntity<PagedModel<EntityModel<ProductDTOResponse>>> getAllTasks(
+    public ResponseEntity<PagedModel<EntityModel<ProductDTOResponse>>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sort,
@@ -92,9 +93,10 @@ public class ProductController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createProduct(
             @RequestPart("data") ProductDTORequest data,
-            @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
+            @RequestPart(value = "images", required = false) MultipartFile[] images ) throws IOException {
 
         System.out.println(data);
+        System.out.println(images.toString());
 
 
         return ResponseEntity.ok(productService.create(data,images));
@@ -146,7 +148,7 @@ public class ProductController {
     public ResponseEntity<?> addImages(
             @RequestPart(value = "id") Long id,
             @RequestPart(value = "images", required = false) MultipartFile[] images) throws IOException {
-
+        System.out.println(images.length);
         return ResponseEntity.ok(productService.addImagesToProduct(id,images));
     }
 }
