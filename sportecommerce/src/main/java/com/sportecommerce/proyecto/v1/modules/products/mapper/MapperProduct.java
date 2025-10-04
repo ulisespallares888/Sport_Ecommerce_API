@@ -26,7 +26,6 @@ public interface MapperProduct {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "price", source = "price")
-    @Mapping(target = "categories", source = "categories")
     Product productDTOResponseToProduct(ProductDTORequest productDTORequest);
 
 

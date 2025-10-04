@@ -84,7 +84,10 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public void delete(String name) {
-
+        Category category = categoryRepository.findByName(name.toUpperCase()).orElseThrow(
+                () -> new ResourceNotFoundException("Category with name " + name + " not found")
+        );
+        categoryRepository.delete(category);
     }
 }
 

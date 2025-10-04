@@ -1,7 +1,12 @@
 package com.sportecommerce.proyecto.v1.modules.products.service.impl;
 
+import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTORequest;
+import com.sportecommerce.proyecto.v1.modules.categories.mapper.MapperCategory;
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
 import com.sportecommerce.proyecto.v1.modules.categories.repository.ICategoryRepository;
+import com.sportecommerce.proyecto.v1.modules.categories.service.impl.CategoryServiceImpl;
+import com.sportecommerce.proyecto.v1.modules.categories.service.impl.CategoryServiceImpl.*;
+import com.sportecommerce.proyecto.v1.modules.categories.repository.ICategoryRepository.*;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTORequest;
 import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.products.mapper.MapperProduct;
@@ -12,7 +17,6 @@ import com.sportecommerce.proyecto.v1.modules.products.validation.ProductValidat
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +33,8 @@ public class ProductServiceImpl implements IProductService {
 
     private final IProductRepository productRepository;
     private static final String MEDIA_DIR = "/sportecommerce/v1/media/images";
+    private final CategoryServiceImpl categoryServiceImpl;
+    private final ICategoryRepository categoryRepository;
 
     @Override
     public PageDTO<ProductDTOResponse> findAll(Pageable pageable) {
@@ -64,18 +70,27 @@ public class ProductServiceImpl implements IProductService {
 
         Product product = MapperProduct.INSTANCE.productDTOResponseToProduct(productDTORequest);
 
-        /*
-        Crear un mapper de catagories
-        implementar create y findByName de Catagories
+        List<Category> categories = new ArrayList<>();
+        for (CategoryDTORequest categoryDTORequest : productDTORequest.getCategories()) {
 
-         */
-        //product.addCategory(category);
-        //product.setCategories(product.getCategories());
+            Category category = categoryRepository.findByName(categoryDTORequest.getName())
+                    .orElseGet(() -> {
+                        Category newCategory = MapperCategory.INSTANCE.categoryDTORequestToCategory(categoryDTORequest);
+                        newCategory.setName(newCategory.getName().toUpperCase());
+                        return categoryRepository.save(newCategory);
+                    });
 
+            categories.add(category);
+        }
+
+        product.setCategories(categories);
         productRepository.save(product);
-        log.info("Product Created with ID = {}".formatted(product.getId()));
+
+        log.info("Product Created with ID = {}", product.getId());
         return MapperProduct.INSTANCE.productToProductDTOResponse(product);
     }
+
+
 
     @Override
     public void delete(Integer id) {

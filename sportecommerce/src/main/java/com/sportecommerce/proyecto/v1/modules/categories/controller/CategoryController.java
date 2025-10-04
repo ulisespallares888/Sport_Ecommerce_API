@@ -66,7 +66,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.findByName(name));
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "{id}")
     public ResponseEntity<CategoryDTOResponse> getCategoryById(@PathVariable Long id){
         return ResponseEntity.ok(categoryService.findById(id));
     }
@@ -74,6 +74,11 @@ public class CategoryController {
     @PostMapping(value = "")
     public ResponseEntity<CategoryDTOResponse> createCategory(@RequestBody CategoryDTORequest categoryDTORequest){
         return ResponseEntity.ok(categoryService.create(categoryDTORequest));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id){
+        return ResponseEntity.noContent().build();
     }
 
 }

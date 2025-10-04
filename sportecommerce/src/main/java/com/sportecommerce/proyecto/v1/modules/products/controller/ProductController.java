@@ -96,8 +96,6 @@ public class ProductController {
             @RequestPart(value = "images", required = false) MultipartFile[] images ) throws IOException {
 
         System.out.println(data);
-        System.out.println(images.toString());
-
 
         return ResponseEntity.ok(productService.create(data,images));
     }

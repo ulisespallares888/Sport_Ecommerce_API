@@ -14,7 +14,11 @@ public interface MapperCategory {
     @Mapping(target = "name", source = "name")
     Category categoryDTORequestToCategory(CategoryDTORequest categoryDTORequest);
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     CategoryDTOResponse categoryToCategoryDTOResponse(Category category);
 
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    Category categoryDTOResponseToCategory(CategoryDTOResponse categoryDTOResponse);
 }
