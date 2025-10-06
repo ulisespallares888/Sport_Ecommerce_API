@@ -7,6 +7,9 @@ import com.sportecommerce.proyecto.v1.modules.categories.mapper.MapperCategory;
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
 import com.sportecommerce.proyecto.v1.modules.categories.repository.ICategoryRepository;
 import com.sportecommerce.proyecto.v1.modules.categories.service.ICategoryService;
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
+import com.sportecommerce.proyecto.v1.modules.products.mapper.MapperProduct;
+import com.sportecommerce.proyecto.v1.modules.products.model.Product;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.DuplicateResourceException;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.InvalidRequestException;
@@ -91,6 +94,24 @@ public class CategoryServiceImpl implements ICategoryService {
 
         category.setActive(false);
         categoryRepository.save(category);
+    }
+
+    @Override
+    public PageDTO<ProductDTOResponse> findProductsByCategories(List<String> names, Pageable pageable) {
+
+        Page<Product> productPage = categoryRepository.findProductsByCategories(names, pageable);
+
+        List<ProductDTOResponse> productDTOResponseList = productPage.getContent()
+                .stream()
+                .map(MapperProduct.INSTANCE::productToProductDTOResponse)
+                .toList();
+
+        return new PageDTO<>(
+                productDTOResponseList,
+                productPage.getNumber(),
+                productPage.getSize(),
+                productPage.getTotalElements()
+        );
     }
 }
 

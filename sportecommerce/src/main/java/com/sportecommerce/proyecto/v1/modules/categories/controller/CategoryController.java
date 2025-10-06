@@ -12,6 +12,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/v1/category")
 @RequiredArgsConstructor
@@ -60,9 +62,9 @@ public class CategoryController {
 
     }
 
-    //@GetMapping(value = "/products")
-    //public ResponseEntity<CategoryDTOResponse> getCategoryByName(@PathVariable String name){
-    //    return ResponseEntity.ok(categoryService.findByName(name));
+    //@GetMapping(value = "{names}/products")
+    //public ResponseEntity<CategoryDTOResponse> getProductsByCategories(@PathVariable List<String> names){
+    //    return ResponseEntity.ok(categoryService.findProductsByCategories(names,));
     //}
 
     @GetMapping(value = "/name/{name}")

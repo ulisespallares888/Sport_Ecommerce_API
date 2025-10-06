@@ -3,8 +3,11 @@ package com.sportecommerce.proyecto.v1.modules.categories.service;
 import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTORequest;
 import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.categories.model.Category;
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface ICategoryService {
     PageDTO<CategoryDTOResponse> findAll(Pageable pageable);
@@ -13,4 +16,5 @@ public interface ICategoryService {
     CategoryDTOResponse create(CategoryDTORequest categoryDTORequest);
     Category update(CategoryDTORequest categoryDTORequest);
     void delete(String name);
+    PageDTO<ProductDTOResponse> findProductsByCategories(List<String> names, Pageable pageable);
 }
