@@ -42,7 +42,7 @@ public class UserServiceImpl implements IUserService {
         return new PageDTO<>(
                 dtoContent,
                 usersPage.getNumber(),
-                usersPage.getSize(),
+                usersPage.getContent().size(),
                 usersPage.getTotalElements()
         );
     }
