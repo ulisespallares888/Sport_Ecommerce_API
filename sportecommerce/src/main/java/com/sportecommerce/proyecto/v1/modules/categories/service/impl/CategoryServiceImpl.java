@@ -99,7 +99,10 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public PageDTO<ProductDTOResponse> findProductsByCategories(List<String> names, Pageable pageable) {
 
+        names = names.stream().map(String::toUpperCase).toList();
+
         Page<Product> productPage = categoryRepository.findProductsByCategories(names, pageable);
+
 
         List<ProductDTOResponse> productDTOResponseList = productPage.getContent()
                 .stream()
@@ -109,7 +112,7 @@ public class CategoryServiceImpl implements ICategoryService {
         return new PageDTO<>(
                 productDTOResponseList,
                 productPage.getNumber(),
-                productPage.getSize(),
+                productPage.getContent().size(),
                 productPage.getTotalElements()
         );
     }
