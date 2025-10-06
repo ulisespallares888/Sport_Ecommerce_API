@@ -3,6 +3,8 @@ package com.sportecommerce.proyecto.v1.modules.categories.controller;
 import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTORequest;
 import com.sportecommerce.proyecto.v1.modules.categories.dto.CategoryDTOResponse;
 import com.sportecommerce.proyecto.v1.modules.categories.service.ICategoryService;
+import com.sportecommerce.proyecto.v1.modules.products.dto.ProductDTOResponse;
+import com.sportecommerce.proyecto.v1.modules.products.model.Product;
 import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -62,10 +64,44 @@ public class CategoryController {
 
     }
 
-    //@GetMapping(value = "{names}/products")
-    //public ResponseEntity<CategoryDTOResponse> getProductsByCategories(@PathVariable List<String> names){
-    //    return ResponseEntity.ok(categoryService.findProductsByCategories(names,));
-    //}
+    @GetMapping(value = "{names}/products")
+    public ResponseEntity<PagedModel<EntityModel<ProductDTOResponse>>> getProductsByCategories(
+            @PathVariable List<String> names,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sort,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        int maxSize = 100;
+        if (size > maxSize) {
+            size = maxSize;
+        }
+
+        Sort sortOrder = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sort).descending()
+                : Sort.by(sort).ascending();
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+
+        // Llama al servicio para obtener los productos por categorías
+        PageDTO<ProductDTOResponse> productPageDTO = categoryService.findProductsByCategories(names, pageable);
+
+        // Convertimos el PageDTO en un Page real para usar con el assembler
+        Page<ProductDTOResponse> productPage = new PageImpl<>(
+                productPageDTO.getContent(),
+                PageRequest.of(productPageDTO.getPage(), productPageDTO.getSize(), sortOrder),
+                productPageDTO.getTotalElements()
+        );
+
+        if (productPage.getContent().isEmpty()) {
+            return ResponseEntity.ok(PagedModel.empty());
+        }
+
+        // Creamos un assembler propio para productos (podés inyectarlo también)
+        PagedResourcesAssembler<ProductDTOResponse> productAssembler = new PagedResourcesAssembler<>(null, null);
+        PagedModel<EntityModel<ProductDTOResponse>> pagedModel = productAssembler.toModel(productPage, EntityModel::of);
+
+        return ResponseEntity.ok(pagedModel);
+    }
 
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<CategoryDTOResponse> getCategoryByName(@PathVariable String name){
