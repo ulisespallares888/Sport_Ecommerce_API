@@ -47,7 +47,7 @@ jobs:
       - name: Wait for MySQL
         run: |
           for i in {1..15}; do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 --protocol=tcp -uroot -proot --silent; then
+            if mysqladmin ping -h 127.0.0.1 -P 3306 --protocol=tcp -u root -proot --silent; then
               echo "MySQL is up!"
               break
             fi
@@ -68,13 +68,13 @@ jobs:
           SPRING_REDIS_PORT: 6379
         run: cd sportecommerce && mvn test -Dspring.profiles.active=test
 
-      - name: Upload coverage to Codacy
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          curl -Ls https://coverage.codacy.com/get.sh | bash
-          REPORTER=$(ls ~/.cache/codacy/coverage-reporter/*/codacy-coverage-reporter)
-          $REPORTER report -l Java -r sportecommerce/target/site/jacoco/jacoco.xml
+      #- name: Upload coverage to Codacy
+      #  env:
+      #    CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      #  run: |
+      #    curl -Ls https://coverage.codacy.com/get.sh | bash
+      #    REPORTER=$(ls ~/.cache/codacy/coverage-reporter/*/codacy-coverage-reporter)
+      #    $REPORTER report -l Java -r sportecommerce/target/site/jacoco/jacoco.xml
 
   deploy:
     needs: build-test
