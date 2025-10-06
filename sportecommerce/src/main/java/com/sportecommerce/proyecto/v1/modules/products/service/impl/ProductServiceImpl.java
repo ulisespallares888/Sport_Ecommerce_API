@@ -46,7 +46,7 @@ public class ProductServiceImpl implements IProductService {
         return new PageDTO<>(
                 productDTOResponseList,
                 productPage.getNumber(),
-                productPage.getSize(),
+                productPage.getContent().size(),
                 productPage.getTotalElements()
 
         );
