@@ -17,6 +17,7 @@ import com.sportecommerce.proyecto.v1.shared.DTOs.PageDTO;
 import com.sportecommerce.proyecto.v1.shared.exceptions.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,10 @@ import java.util.List;
 public class ProductServiceImpl implements IProductService {
 
     private final IProductRepository productRepository;
-    private static final String MEDIA_DIR = "/sportecommerce/v1/media/images";
+    @Value(value = "${media.location}")
+    private String MEDIA_DIRECTORY;
+    @Value(value = "${media.url.path}")
+    private String MEDIA_URL;
     private final ICategoryRepository categoryRepository;
 
     @Override
