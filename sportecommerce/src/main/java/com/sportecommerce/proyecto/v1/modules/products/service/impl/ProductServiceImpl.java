@@ -93,6 +93,52 @@ public class ProductServiceImpl implements IProductService {
 
 
 
+    /*
+        Product producto = new Product();
+        producto.setNombre(datos.getNombre());
+        producto.setDescripcion(datos.getDescripcion());
+        producto.setPrecio(datos.getPrecio());
+
+        for (MultipartFile imagen : images) {
+            if (imagen.isEmpty()) continue;
+
+            String extension = getExtension(imagen.getOriginalFilename());
+            BufferedImage clean = stripMetadata(imagen);
+            String fileName = UUID.randomUUID() + "." + extension;
+            File outputFile = Paths.get(MEDIA_DIR, fileName).toFile();
+            ImageIO.write(clean, extension, outputFile);
+
+            String url = "http://localhost:8081/media/" + fileName;
+            producto.addImagen(url);
+        }
+
+        Product guardado = productService.guardarProducto(producto);
+        return ResponseEntity.ok(Map.of("id", guardado.getId(), "imagenes", guardado.getImagenes()));
+    }
+
+
+     private BufferedImage stripMetadata(MultipartFile file) throws IOException {
+        BufferedImage original = ImageIO.read(file.getInputStream());
+        BufferedImage cleaned = new BufferedImage(
+                original.getWidth(),
+                original.getHeight(),
+                BufferedImage.TYPE_INT_RGB
+        );
+        Graphics2D g = cleaned.createGraphics();
+        g.drawImage(original, 0, 0, null);
+        g.dispose();
+        return cleaned;
+    }
+
+    private String getExtension(String filename) {
+        if (filename == null) return "";
+        int dot = filename.lastIndexOf('.');
+        return (dot == -1) ? "" : filename.substring(dot + 1);
+    }
+     */
+
+
+
     @Override
     public void delete(Integer id) {
 
